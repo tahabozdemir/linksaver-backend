@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: linksaver
+  data:
+    mongodb:
+      uri: mongodb://root:root123@localhost:27017/mongodb?authSource=admin
