@@ -1,6 +1,7 @@
 package com.proto.linksaver.controller;
 
 import com.proto.linksaver.dto.CategoryDto;
+import com.proto.linksaver.payload.request.CategoryRequest;
 import com.proto.linksaver.payload.response.BaseResponse;
 import com.proto.linksaver.payload.response.CategoryResponse;
 import com.proto.linksaver.service.CategoryService;
@@ -10,24 +11,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/category")
 public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<BaseResponse<CategoryResponse>> create(@RequestBody CategoryDto categoryDto) {
-        CategoryResponse categoryResponse = categoryService.create(categoryDto);
+    public ResponseEntity<BaseResponse<CategoryResponse>> create(@RequestBody CategoryRequest categoryRequest) {
+        CategoryResponse categoryResponse = categoryService.create(categoryRequest);
         BaseResponse<CategoryResponse> response = new BaseResponse<>(categoryResponse);
         return ResponseEntity
                 .ok()
                 .body(response);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<BaseResponse<List<CategoryResponse>>> getAll() {
-        List<CategoryResponse> categoryResponse = categoryService.getAll();
+    @GetMapping
+    public ResponseEntity<BaseResponse<List<CategoryResponse>>> getAll(@RequestParam String userId) {
+        List<CategoryResponse> categoryResponse = categoryService.getAll(userId);
         BaseResponse<List<CategoryResponse>> response = new BaseResponse<>(categoryResponse);
         return ResponseEntity
                 .ok()
@@ -53,8 +54,8 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        categoryService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable String id, @RequestBody CategoryRequest categoryRequest) {
+        categoryService.delete(categoryRequest.userId(), id);
         return ResponseEntity
                 .ok()
                 .build();
