@@ -13,14 +13,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Link {
     @Id
     private String id;
-    private String categoryId;
     private String title;
     private String url;
     private Boolean isFavorite;
     private Boolean isDelete;
 
-    public Link(String categoryId, String title, String url, Boolean isFavorite, Boolean isDelete) {
-        this.categoryId = categoryId;
+    public Link(String title, String url, Boolean isFavorite, Boolean isDelete) {
         this.title = title;
         this.url = url;
         this.isFavorite = isFavorite;
