@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/link")
+@RequestMapping("/links")
 public class LinkController {
     private final LinkService linkService;
 
@@ -54,8 +54,8 @@ public class LinkController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id, @RequestBody LinkRequest linkRequest) {
-        linkService.delete(linkRequest.categoryId(), id);
+    public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam String categoryId) {
+        linkService.delete(categoryId, id);
         return ResponseEntity
                 .ok()
                 .build();

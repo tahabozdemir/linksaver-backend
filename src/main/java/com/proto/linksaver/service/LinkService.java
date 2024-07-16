@@ -11,6 +11,7 @@ import com.proto.linksaver.mapper.LinkMapper;
 import com.proto.linksaver.repository.LinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,15 @@ public class LinkService {
     private final CategoryRepository categoryRepository;
     private final LinkRepository linkRepository;
 
+    @Transactional
     public LinkResponse create(LinkRequest linkRequest) {
-        Link link = new Link(linkRequest.categoryId(), linkRequest.title(), linkRequest.url(), linkRequest.isFavorite(), linkRequest.isDelete());
+        Link link = Link.builder()
+                .title(linkRequest.title())
+                .url(linkRequest.url())
+                .isFavorite(linkRequest.isFavorite())
+                .isDelete(linkRequest.isDelete())
+                .build();
+
         Category category = categoryRepository.findById(linkRequest.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
 
@@ -46,6 +54,7 @@ public class LinkService {
         return LinkMapper.INSTANCE.linkToLinkResponse(link);
     }
 
+    @Transactional
     public void delete(String categoryId, String linkId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));

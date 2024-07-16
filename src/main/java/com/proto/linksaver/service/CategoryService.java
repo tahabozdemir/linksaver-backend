@@ -12,6 +12,7 @@ import com.proto.linksaver.repository.LinkRepository;
 import com.proto.linksaver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,12 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final LinkRepository linkRepository;
 
+    @Transactional
     public CategoryResponse create(CategoryRequest categoryRequest) {
-        Category category = new Category(categoryRequest.title(), categoryRequest.emoji());
+        Category category = Category.builder()
+                .title(categoryRequest.title())
+                .emoji(categoryRequest.emoji()).build();
+
         User user = userRepository.findById(categoryRequest.userId())
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.ACCOUNT_NOT_FOUND));
 
@@ -47,6 +52,7 @@ public class CategoryService {
         return CategoryMapper.INSTANCE.categoryToCategoryResponse(category);
     }
 
+    @Transactional
     public void delete(String userId, String id) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.ACCOUNT_NOT_FOUND));
@@ -58,6 +64,7 @@ public class CategoryService {
         user.getCategories().removeIf(categoryId -> categoryId.equals(id));
         linkRepository.deleteAllById(links);
         categoryRepository.delete(category);
+        userRepository.save(user);
     }
 
     public List<CategoryResponse> getAll(String userId) {
