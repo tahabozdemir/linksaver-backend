@@ -4,17 +4,17 @@ import com.proto.linksaver.dto.CategoryDto;
 import com.proto.linksaver.payload.request.CategoryRequest;
 import com.proto.linksaver.payload.response.BaseResponse;
 import com.proto.linksaver.payload.response.CategoryResponse;
+import com.proto.linksaver.payload.response.LinkResponse;
 import com.proto.linksaver.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -48,6 +48,14 @@ public class CategoryController {
                 .body(response);
     }
 
+    @GetMapping("/{categoryId}/links")
+    public ResponseEntity<BaseResponse<List<LinkResponse>>> getAllLinks(@PathVariable String categoryId) {
+        List<LinkResponse> linkResponse = categoryService.getAllLinksByCategoryId(categoryId);
+        BaseResponse<List<LinkResponse>> response = new BaseResponse<>(linkResponse);
+        return ResponseEntity
+                .ok()
+                .body(response);
+    }
 
     @PatchMapping("/{id}")
     @PreAuthorize("#userId == authentication.name")
@@ -67,8 +75,4 @@ public class CategoryController {
                 .ok()
                 .build();
     }
-
-
-
-
 }

@@ -1,3 +1,3 @@
 package com.proto.linksaver.payload.response;
 
-public record LinkResponse(String id, String categoryId, String title, String url, Boolean isFavorite, Boolean isDelete) { }
+public record LinkResponse(String id, String title, String url, Boolean isFavorite) { }

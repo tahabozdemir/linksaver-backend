@@ -6,6 +6,7 @@ import com.proto.linksaver.model.Category;
 import com.proto.linksaver.model.User;
 import com.proto.linksaver.payload.request.CategoryRequest;
 import com.proto.linksaver.payload.response.CategoryResponse;
+import com.proto.linksaver.payload.response.LinkResponse;
 import com.proto.linksaver.repository.CategoryRepository;
 import com.proto.linksaver.mapper.CategoryMapper;
 import com.proto.linksaver.repository.LinkRepository;
@@ -23,6 +24,7 @@ public class CategoryService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final LinkRepository linkRepository;
+    private final LinkService  linkService;
 
     @Transactional
     public CategoryResponse create(CategoryRequest categoryRequest) {
@@ -45,9 +47,7 @@ public class CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
 
-        category.setTitle(categoryDto.title());
-        category.setEmoji(categoryDto.emoji());
-        category.setLinks(categoryDto.links());
+        CategoryMapper.INSTANCE.updateCategoryFromDto(categoryDto,category);
         categoryRepository.save(category);
         return CategoryMapper.INSTANCE.categoryToCategoryResponse(category);
     }
@@ -85,5 +85,10 @@ public class CategoryService {
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
 
         return CategoryMapper.INSTANCE.categoryToCategoryResponse(category);
+    }
+
+
+    public List<LinkResponse> getAllLinksByCategoryId(String categoryId) {
+        return linkService.getAllByCategoryId(categoryId);
     }
 }

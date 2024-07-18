@@ -7,9 +7,8 @@ import com.proto.linksaver.payload.response.LinkResponse;
 import com.proto.linksaver.service.LinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +17,7 @@ public class LinkController {
     private final LinkService linkService;
 
     @PostMapping
+    @PreAuthorize("#linkRequest.userId == authentication.name")
     public ResponseEntity<BaseResponse<LinkResponse>> create(@RequestBody LinkRequest linkRequest) {
         LinkResponse linkResponse = linkService.create(linkRequest);
         BaseResponse<LinkResponse> response = new BaseResponse<>(linkResponse);
@@ -26,17 +26,9 @@ public class LinkController {
                 .body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<BaseResponse<List<LinkResponse>>> getAll(@RequestParam String categoryId) {
-        List<LinkResponse> linkResponse = linkService.getAll(categoryId);
-        BaseResponse<List<LinkResponse>> response = new BaseResponse<>(linkResponse);
-        return ResponseEntity
-                .ok()
-                .body(response);
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<LinkResponse>> get(@PathVariable String id) {
+    @PreAuthorize("userId == authentication.name")
+    public ResponseEntity<BaseResponse<LinkResponse>> get(@PathVariable String id, @RequestParam String userId) {
         LinkResponse linkResponse = linkService.getById(id);
         BaseResponse<LinkResponse> response = new BaseResponse<>(linkResponse);
         return ResponseEntity
@@ -45,6 +37,7 @@ public class LinkController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("#linkDto.userId() == authentication.name")
     public ResponseEntity<BaseResponse<LinkResponse>> update(@RequestBody LinkDto linkDto, @PathVariable String id) {
         LinkResponse linkResponse = linkService.update(id, linkDto);
         BaseResponse<LinkResponse> response = new BaseResponse<>(linkResponse);
@@ -54,8 +47,9 @@ public class LinkController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam String categoryId) {
-        linkService.delete(categoryId, id);
+    @PreAuthorize("#userId == authentication.name")
+    public ResponseEntity<Void> delete(@PathVariable String id, @RequestParam String userId) {
+        linkService.delete(id);
         return ResponseEntity
                 .ok()
                 .build();
