@@ -11,6 +11,7 @@ import com.proto.linksaver.mapper.LinkMapper;
 import com.proto.linksaver.repository.LinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,16 @@ public class LinkService {
     private final CategoryRepository categoryRepository;
     private final LinkRepository linkRepository;
 
+    @Transactional
     public LinkResponse create(LinkRequest linkRequest) {
-        Link link = new Link(linkRequest.categoryId(), linkRequest.title(), linkRequest.url(), linkRequest.isFavorite(), linkRequest.isDelete());
+        Link link = Link.builder()
+                .userId(linkRequest.userId())
+                .categoryId(linkRequest.categoryId())
+                .title(linkRequest.title())
+                .url(linkRequest.url())
+                .isFavorite(linkRequest.isFavorite())
+                .build();
+
         Category category = categoryRepository.findById(linkRequest.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
 
@@ -38,41 +47,62 @@ public class LinkService {
         Link link = linkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.LINK_NOT_FOUND));
 
-        link.setTitle(linkDto.title());
-        link.setUrl(linkDto.url());
-        link.setIsFavorite(linkDto.isFavorite());
-        link.setIsDelete(linkDto.isDelete());
+        LinkMapper.INSTANCE.updateLinkFromDto(linkDto, link);
         linkRepository.save(link);
         return LinkMapper.INSTANCE.linkToLinkResponse(link);
     }
 
-    public void delete(String categoryId, String linkId) {
-        Category category = categoryRepository.findById(categoryId)
+    @Transactional
+    public void delete(String linkId) {
+        Link deletedLink = linkRepository.findById(linkId)
+                .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.LINK_NOT_FOUND));
+
+        Category category = categoryRepository.findById(deletedLink.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
 
         category.getLinks().removeIf(link -> link.equals(linkId));
-        linkRepository.deleteById(linkId);
+        linkRepository.delete(deletedLink);
         categoryRepository.save(category);
     }
 
-    public List<LinkResponse> getAll(String categoryId) {
+    public List<LinkResponse> getAllByCategoryId(String categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
 
         List<String> linkIds = category.getLinks();
         List<Link> links = linkRepository.findAllById(linkIds);
-        List<LinkResponse> response = links
-                .stream()
-                .map(LinkMapper.INSTANCE::linkToLinkResponse)
-                .toList();
-
-        return response;
+        return mapToLinkResponses(links);
     }
 
     public LinkResponse getById(String id) {
         Link link = linkRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.LINK_NOT_FOUND));
-
         return LinkMapper.INSTANCE.linkToLinkResponse(link);
+    }
+
+    public List<LinkResponse> getFavoritesByUserId(String userId) {
+        List<Link> links = linkRepository.findByUserIdAndIsFavorite(userId, true);
+        return mapToLinkResponses(links);
+    }
+
+    public List<LinkResponse> getAllByUserId(String userId) {
+        List<Link> links = linkRepository.findByUserId(userId);
+        return mapToLinkResponses(links);
+    }
+
+    public List<LinkResponse> searchByTitle(String userId, String title) {
+        List<Link> links = linkRepository.findByUserIdAndTitleLikeIgnoreCase(userId, title);
+        return mapToLinkResponses(links);
+    }
+
+    public List<LinkResponse> searchFavoriteByTitle(String userId, String title) {
+        List<Link> links = linkRepository.findByUserIdAndIsFavoriteAndTitleLikeIgnoreCase(userId, true, title);
+        return mapToLinkResponses(links);
+    }
+
+    private List<LinkResponse> mapToLinkResponses(List<Link> links) {
+        return links.stream()
+                .map(LinkMapper.INSTANCE::linkToLinkResponse)
+                .toList();
     }
 }

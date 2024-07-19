@@ -199,4 +199,4 @@ README.html
 *.iml
 .idea
 .exercism
-secrets.yaml
+/src/main/resources/secrets.yaml
