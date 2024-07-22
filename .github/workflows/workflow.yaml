@@ -99,9 +99,6 @@ jobs:
           name: build-artifacts
           path: ./target/linksaver-${{env.APP_VERSION}}.jar
 
-      - name: Where am i?
-        run: pwd
-
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
