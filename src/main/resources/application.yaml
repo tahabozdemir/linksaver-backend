@@ -15,3 +15,4 @@ spring:
           issuer-uri: ${secret.ISSUER_URI}
           jwk-set-uri: ${secret.JWK_SET_URI}
 
+
