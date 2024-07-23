@@ -1,6 +1,8 @@
 server:
   port: 8080
 spring:
+  active:
+    profile: prod
   application:
     name: linksaver
   data:
@@ -14,3 +16,8 @@ spring:
         jwt:
           issuer-uri: ${secret.ISSUER_URI}
           jwk-set-uri: ${secret.JWK_SET_URI}
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

@@ -200,3 +200,4 @@ README.html
 .idea
 .exercism
 /src/main/resources/secrets.yaml
+src/main/resources/static/**
