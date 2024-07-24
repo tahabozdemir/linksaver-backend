@@ -19,7 +19,7 @@ jobs:
           java-version: "17"
 
       - name: Validate
-        run: mvn validate -Pprod -DskipTests
+        run: mvn validate
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -37,7 +37,9 @@ jobs:
         run: aws s3 sync s3://frontend-linksaver-s3/builds/${{env.COMMIT_HASH}} src/main/resources/static
 
       - name: Build Spring Boot project
-        run: mvn package -Pprod -DskipTests
+        env:
+          API_KEY: ${{secrets.API_KEY}}
+        run: mvn package -DskipTests
 
       - name: Get App Version
         id: get-app-version

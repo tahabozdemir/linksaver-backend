@@ -1,21 +1,8 @@
 server:
   port: 8080
 spring:
-  active:
-    profile: prod
   application:
     name: linksaver
-  data:
-    mongodb:
-      uri: mongodb://root:root123@localhost:27017/mongodb?authSource=admin
-  config:
-    import: optional:secrets.yaml
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${secret.ISSUER_URI}
-          jwk-set-uri: ${secret.JWK_SET_URI}
 logging:
   level:
     org:
