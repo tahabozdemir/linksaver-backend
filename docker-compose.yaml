@@ -4,6 +4,7 @@ services:
   mongo:
     image: mongo
     container_name: mongo
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
@@ -15,6 +16,7 @@ services:
     depends_on:
       - mongo
     image: tahabozdemir/linksaver:latest
+    restart: always
     environment:
       - LINKSAVER_AUTH_DB_NAME=${LINKSAVER_AUTH_DB_NAME}
       - LINKSAVER_DB_HOST=mongo
@@ -26,7 +28,7 @@ services:
       - LINKSAVER_JWK_SET_URI=${LINKSAVER_JWK_SET_URI}
       - secret.API_KEY=${API_KEY}
     ports:
-      - "8080:8080"
+      - "80:8080"
 
   mongo-express:
     image: mongo-express
@@ -38,6 +40,9 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USER}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASS}
       ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: ${EXP_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${EXP_PASS}
+
     depends_on:
       - mongo
 
