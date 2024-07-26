@@ -1,4 +1,5 @@
-data:
+spring:
+ data:
   mongodb:
     authentication-database: ${LINKSAVER_AUTH_DB_NAME}
     host: ${LINKSAVER_DB_HOST}
@@ -6,11 +7,13 @@ data:
     database: ${LINKSAVER_DB_NAME}
     username: ${LINKSAVER_DB_USER}
     password: ${LINKSAVER_DB_PASS}
-security:
+
+ security:
   oauth2:
-    resourceserver:
-      jwt:
-        issuer-uri: ${LINKSAVER_ISSUER_URI}
-        jwk-set-uri: ${LINKSAVER_JWK_SET_URI}
+   resourceserver:
+    jwt:
+      issuer-uri: ${LINKSAVER_ISSUER_URI}
+      jwk-set-uri: ${LINKSAVER_JWK_SET_URI}
+
 secret:
   API_KEY: ${API_KEY}
