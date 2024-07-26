@@ -5,8 +5,8 @@ services:
     image: mongo
     container_name: mongo
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root123
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
     ports:
       - "27017:27017"
     volumes:
@@ -14,17 +14,17 @@ services:
   app:
     depends_on:
       - mongo
-    image: tahabozdemir/linksaver:0.0.1
+    image: tahabozdemir/linksaver:latest
     environment:
-      - LINKSAVER_AUTH_DB_NAME=admin
+      - LINKSAVER_AUTH_DB_NAME=${LINKSAVER_AUTH_DB_NAME}
       - LINKSAVER_DB_HOST=mongo
-      - LINKSAVER_DB_PORT=27017
-      - LINKSAVER_DB_NAME=mongodb
-      - LINKSAVER_DB_USER=root
-      - LINKSAVER_DB_PASS=root123
-      - LINKSAVER_ISSUER_URI=https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_BkGi0vsAP
-      - LINKSAVER_JWK_SET_URI=https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_BkGi0vsAP/.well-known/jwks.json
-      - secret.API_KEY=api_key
+      - LINKSAVER_DB_PORT=${LINKSAVER_DB_PORT}
+      - LINKSAVER_DB_NAME=${LINKSAVER_DB_NAME}
+      - LINKSAVER_DB_USER=${DB_USER}
+      - LINKSAVER_DB_PASS=${DB_PASS}
+      - LINKSAVER_ISSUER_URI=${LINKSAVER_ISSUER_URI}
+      - LINKSAVER_JWK_SET_URI=${LINKSAVER_JWK_SET_URI}
+      - secret.API_KEY=${API_KEY}
     ports:
       - "8080:8080"
 
@@ -35,8 +35,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root123
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_PASS}
       ME_CONFIG_MONGODB_SERVER: mongo
     depends_on:
       - mongo
