@@ -15,5 +15,20 @@ spring:
       issuer-uri: <JWT_ISSUER_URI>
       jwk-set-uri: <JWK_SET_URI>
 
+mongock:
+  enabled: true
+  migration-repository-name: mongock-migrations
+  default-author: Taha Bozdemir
+  migration-scan-package: com.proto.linksaver.migrations
+
+
+aws:
+  region: <AWS_REGION>
+  cognito:
+    clientId: <USER_POOL_APP_CLIENT_ID>
+    testUserEmail: <USER_EMAIL>
+    testUserTemporaryPassword: <USER_TEMP_PASSWORD>
+
 secret:
-  API_KEY: <API_KEY_CREATE_USER>
+  API_KEY: api-key
+
