@@ -1,7 +1,7 @@
-package com.proto.linksaver.migrations;
+package com.proto.linksaver.migration;
 
 import com.proto.linksaver.exception.ResourceNotFoundException;
-import com.proto.linksaver.migrations.properties.CognitoProperties;
+import com.proto.linksaver.migration.properties.CognitoProperties;
 import com.proto.linksaver.model.User;
 import com.proto.linksaver.payload.request.CategoryRequest;
 import com.proto.linksaver.payload.response.CategoryResponse;
@@ -26,7 +26,7 @@ public class TestCategoryChangeUnit {
         String email = cognitoProperties.getTestUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.ACCOUNT_NOT_FOUND));
-        CategoryResponse category = categoryService.create(new CategoryRequest(user.getId(),"Home","home"));
+        CategoryResponse category = categoryService.create(new CategoryRequest(user.getId(), "Home", "home"));
         categoryId = category.id();
         userId = user.getId();
     }

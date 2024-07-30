@@ -1,7 +1,7 @@
-package com.proto.linksaver.migrations;
+package com.proto.linksaver.migration;
 
 import com.proto.linksaver.exception.ResourceNotFoundException;
-import com.proto.linksaver.migrations.properties.CognitoProperties;
+import com.proto.linksaver.migration.properties.CognitoProperties;
 import com.proto.linksaver.model.User;
 import com.proto.linksaver.payload.request.LinkRequest;
 import com.proto.linksaver.payload.response.CategoryResponse;
@@ -15,6 +15,7 @@ import io.mongock.api.annotations.RollbackExecution;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+
 
 @ChangeUnit(id = "createTestLink", order = "3", author = "Taha Bozdemir")
 @RequiredArgsConstructor

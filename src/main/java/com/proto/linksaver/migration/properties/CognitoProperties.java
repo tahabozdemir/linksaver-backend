@@ -1,4 +1,4 @@
-package com.proto.linksaver.migrations.properties;
+package com.proto.linksaver.migration.properties;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,9 @@
 package com.proto.linksaver.config;
 
+import com.proto.linksaver.interceptor.LogInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -24,5 +26,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .setCachePeriod(0)
                 .resourceChain(true)
                 .addResolver(new SpaWebResourceResolver());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
     }
 }

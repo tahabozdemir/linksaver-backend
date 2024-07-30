@@ -83,10 +83,8 @@ public class CategoryService {
     public CategoryResponse getById(String id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ResourceNotFoundException.ResourceNotFoundExceptionCodeEnum.CATEGORY_NOT_FOUND));
-
         return CategoryMapper.INSTANCE.categoryToCategoryResponse(category);
     }
-
 
     public List<LinkResponse> getAllLinksByCategoryId(String categoryId) {
         return linkService.getAllByCategoryId(categoryId);

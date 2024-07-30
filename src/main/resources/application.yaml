@@ -1,10 +1,14 @@
 server:
   port: 8080
 spring:
+  main:
+    banner-mode: off
   application:
     name: linksaver
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
+
+mongock:
+  enabled: true
+  migration-repository-name: mongock-migrations
+  default-author: Taha Bozdemir
+  migration-scan-package: com.proto.linksaver.migration
+

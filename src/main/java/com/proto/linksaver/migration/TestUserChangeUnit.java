@@ -1,7 +1,7 @@
-package com.proto.linksaver.migrations;
+package com.proto.linksaver.migration;
 
 import com.amazonaws.services.cognitoidp.model.SignUpResult;
-import com.proto.linksaver.migrations.properties.CognitoProperties;
+import com.proto.linksaver.migration.properties.CognitoProperties;
 import com.proto.linksaver.model.User;
 import com.proto.linksaver.repository.UserRepository;
 import com.proto.linksaver.service.CognitoService;
@@ -17,7 +17,6 @@ public class TestUserChangeUnit {
     private String userSub;
     private final UserRepository userRepository;
     private final CognitoService cognitoService;
-
 
     @Execution
     public void createTestUser() {

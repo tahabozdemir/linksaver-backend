@@ -11,7 +11,7 @@ public class CognitoService {
     private final AWSCognitoIdentityProvider cognitoClient;
     private final String clientId;
 
-    public CognitoService(@Value("${aws.cognito.clientId}") String clientId,
+    public CognitoService(@Value("${aws.cognito.client-id}") String clientId,
                           @Value("${aws.region}") String region) {
         this.clientId = clientId;
         this.cognitoClient = AWSCognitoIdentityProviderClientBuilder.standard()
