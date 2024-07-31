@@ -30,7 +30,7 @@ services:
       - COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}
       - TEST_USER_EMAIL=${TEST_USER_EMAIL}
       - TEST_USER_PASS=${TEST_USER_PASS}
-      - secret.API_KEY=${API_KEY}
+      - API_KEY=${API_KEY}
     ports:
       - "80:8080"
 
