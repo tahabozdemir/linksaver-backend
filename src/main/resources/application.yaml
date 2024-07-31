@@ -11,4 +11,3 @@ mongock:
   migration-repository-name: mongock-migrations
   default-author: Taha Bozdemir
   migration-scan-package: com.proto.linksaver.migration
-

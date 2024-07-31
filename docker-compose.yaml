@@ -73,6 +73,7 @@ services:
     image: logstash:8.14.3
     container_name: logstash
     volumes:
+      - ./config/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./config/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
     ports:
       - 50000:50000/tcp
