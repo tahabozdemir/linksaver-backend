@@ -4,7 +4,6 @@ services:
   mongo:
     image: mongo
     container_name: mongo
-    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
@@ -12,11 +11,11 @@ services:
       - "27017:27017"
     volumes:
       - db_data:/data/db
+
   app:
     depends_on:
       - mongo
     image: tahabozdemir/linksaver:latest
-    restart: always
     environment:
       - LINKSAVER_AUTH_DB_NAME=${LINKSAVER_AUTH_DB_NAME}
       - LINKSAVER_DB_HOST=mongo
@@ -33,11 +32,12 @@ services:
       - API_KEY=${API_KEY}
     ports:
       - "80:8080"
+    volumes:
+      - ./logs:/logs
 
   mongo-express:
     image: mongo-express
     container_name: mongo-express
-    restart: always
     ports:
       - "8081:8081"
     environment:
@@ -46,7 +46,6 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH_USERNAME: ${EXP_USER}
       ME_CONFIG_BASICAUTH_PASSWORD: ${EXP_PASS}
-
     depends_on:
       - mongo
 
@@ -65,7 +64,6 @@ services:
       discovery.type: single-node
     networks:
       - elk
-    restart: unless-stopped
     depends_on:
       - app
 
@@ -75,6 +73,7 @@ services:
     volumes:
       - ./config/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./config/logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./logs:/logs
     ports:
       - 50000:50000/tcp
     environment:
@@ -84,7 +83,6 @@ services:
       - elk
     depends_on:
       - elasticsearch
-    restart: unless-stopped
 
   kibana:
     image: kibana:8.14.3
@@ -97,7 +95,6 @@ services:
       - elk
     depends_on:
       - elasticsearch
-    restart: unless-stopped
 
 networks:
   elk:
