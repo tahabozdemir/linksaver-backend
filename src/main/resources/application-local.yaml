@@ -1,19 +1,30 @@
 spring:
- data:
-  mongodb:
-    authentication-database: <MONGO_AUTH_DB_VAR>
-    host: <MONGO_HOST_NAME>
-    port:  <MONGO_HOST_PORT>
-    database: <MONGO_DB_NAME>
-    username: <MONGO_DB_USERNAME>
-    password: <MONGO_DB_PASSWORD>
+  data:
+    mongodb:
+      authentication-database: <MONGO_AUTH_DB_VAR>
+      host: <MONGO_HOST_NAME>
+      port: <MONGO_HOST_PORT>
+      database: <MONGO_DB_NAME>
+      username: <MONGO_DB_USERNAME>
+      password: <MONGO_DB_PASSWORD>
 
- security:
-  oauth2:
-   resourceserver:
-    jwt:
-      issuer-uri: <JWT_ISSUER_URI>
-      jwk-set-uri: <JWK_SET_URI>
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: <JWT_ISSUER_URI>
+          jwk-set-uri: <JWK_SET_URI>
+
+aws:
+  region: eu-west-1
+  cognito:
+    client-id: <COGNITO_APP_CLIENT_ID>
+    test-user-email: <TEST_USER_EMAIL>
+    test-user-temporary-password: <TEST_USER_PASSWORD>
 
 secret:
-  API_KEY: <API_KEY_CREATE_USER>
+  lambda:
+    api-key: api-key
+
+
+

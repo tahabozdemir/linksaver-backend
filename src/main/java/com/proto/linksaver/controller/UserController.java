@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @Value("${secret.API_KEY}")
+    @Value("${secret.lambda.api-key}")
     private String API_KEY;
 
     @PostMapping
