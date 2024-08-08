@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/static/**", "/", "/index.html", "/links", "/all/links", "all/links/favorites").permitAll()
+                        .requestMatchers("/static/**", "/", "/index.html", "/links", "/all/links", "/all/links/favorites", "/locales/*", "/forgot-password").permitAll()
                         .requestMatchers("/users/**").permitAll()
                         .requestMatchers("/signup", "/signin").permitAll()
                         .anyRequest().authenticated()
